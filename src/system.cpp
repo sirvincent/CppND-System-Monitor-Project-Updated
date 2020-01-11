@@ -26,7 +26,10 @@ Processor& System::Cpu()
 vector<Process>& System::Processes() { return processes_; }
 
 // TODO: Return the system's memory utilization
-float System::MemoryUtilization() { return 0.0; }
+float System::MemoryUtilization()
+{
+  return LinuxParser::MemoryUtilization();
+}
 
 // TODO: Return the number of seconds since the system started running
 long int System::UpTime() { return 0; }

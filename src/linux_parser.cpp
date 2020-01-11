@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <cassert>
 
 using std::stof;
 using std::string;
@@ -67,8 +68,39 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+// DONE: Read and return the system memory utilization
+float LinuxParser::MemoryUtilization()
+{
+  string memoryTotalString, memoryFreeString, unitTotal, unitFree;
+  string line, name, value, unit;
+  std::ifstream stream(kProcDirectory + kMeminfoFilename);
+  if (stream.is_open())
+  {
+    while(std::getline(stream, line))
+    {
+      std::replace(line.begin(), line.end(), ':', ' ');
+      std::istringstream linestream(line);
+      linestream >> name >> value >> unit;
+      if (name == "MemTotal")
+      {
+        memoryTotalString = value;
+        unitTotal = unit;
+      }
+      else if (name == "MemFree")
+      {
+        memoryFreeString = value;
+        unitFree = unit;
+      }
+    }
+    // otherwise the calculation is wrong
+    assert(unitTotal == unitFree);
+  }
+
+  float memoryTotal = std::stof(memoryTotalString);
+  float memoryFree  = std::stof(memoryFreeString);
+  float memoryUtilization = (memoryTotal - memoryFree) / memoryTotal;
+  return memoryUtilization;
+}
 
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() { return 0; }
