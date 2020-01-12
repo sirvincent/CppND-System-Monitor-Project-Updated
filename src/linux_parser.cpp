@@ -168,6 +168,33 @@ int LinuxParser::RunningProcesses()
   return std::stoi(runningProcesses);
 }
 
+// DONE: Read and return CPU utilization
+// TODO: BONUS: read in each separate core usage in place of total
+vector<string> LinuxParser::CpuUtilization()
+{
+  string key, value;
+  string line;
+  std::vector<string> values{};
+  std::ifstream stream(kProcDirectory + kStatFilename);
+  if (stream.is_open())
+  {
+    while(std::getline(stream, line))
+    {
+      std::istringstream linestream(line);
+      linestream >> key;
+      if (key == "cpu")
+      {
+        for(int idx{0}; idx < 10; idx++)
+        {
+          linestream >> value;
+          values.push_back(value);
+        }
+      }
+    }
+  }
+  return values;
+}
+
 
 
 // TODO: Read and return the number of jiffies for the system
@@ -183,8 +210,6 @@ long LinuxParser::ActiveJiffies() { return 0; }
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
 
-// TODO: Read and return CPU utilization
-vector<string> LinuxParser::CpuUtilization() { return {}; }
 // TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Command(int pid [[maybe_unused]]) { return string(); }
