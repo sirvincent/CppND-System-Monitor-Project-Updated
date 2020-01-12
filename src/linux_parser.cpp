@@ -102,7 +102,7 @@ float LinuxParser::MemoryUtilization()
   return memoryUtilization;
 }
 
-// TODO: Read and return the system uptime
+// DONE: Read and return the system uptime
 long LinuxParser::UpTime()
 {
   string uptime, suspendTime;
