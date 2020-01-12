@@ -16,11 +16,17 @@ void Format::formatNumber(string &number)
 }
 
 
-// TODO: Complete this helper function
+// DONE: Complete this helper function
 // INPUT: Long int measuring seconds
 // OUTPUT: HH:MM:SS
 string Format::ElapsedTime(long seconds)
 {
+  //display can only show up to 99 hours
+  if (seconds > 360000)
+  {
+    seconds = seconds - 360000;
+  }
+
   long hours = seconds / 3600;
   if (hours > 0)
   {
