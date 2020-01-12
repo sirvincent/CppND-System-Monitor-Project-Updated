@@ -25,14 +25,17 @@ Processor& System::Cpu()
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() { return processes_; }
 
-// TODO: Return the system's memory utilization
+// DONE: Return the system's memory utilization
 float System::MemoryUtilization()
 {
   return LinuxParser::MemoryUtilization();
 }
 
-// TODO: Return the number of seconds since the system started running
-long int System::UpTime() { return 0; }
+// DONE: Return the number of seconds since the system started running
+long int System::UpTime()
+{
+  return LinuxParser::UpTime();
+}
 
 // TODO: Return the total number of processes on the system
 int System::TotalProcesses() { return 0; }
