@@ -39,6 +39,20 @@ Processor& System::Cpu()
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes()
 {
+  std::vector<Process> processes;
+  vector<int> pids = LinuxParser::Pids();
+
+  // clear to circumvent double entries, is it better to look only for 'dead' and new ones?
+  //   it will be complexer, at maybe a marginel efficiency boost?
+  processes_.clear();
+  for (auto pid : pids)
+  {
+    Process process;
+    process.Pid(pid);
+
+    processes_.push_back(process);
+  }
+
   return processes_;
 }
 
