@@ -16,14 +16,31 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-// TODO: Return the system's CPU
+// DONE: Return the system's CPU
 Processor& System::Cpu()
 {
+  std::vector<string> cpuUtilizationString = LinuxParser::CpuUtilization();
+
+  // whos job is it to convert to long, this function or Process? I think this function
+  cpu_.user(std::stol(cpuUtilizationString[0]));
+  cpu_.nice(std::stol(cpuUtilizationString[1]));
+  cpu_.system(std::stol(cpuUtilizationString[2]));
+  cpu_.idle(std::stol(cpuUtilizationString[3]));
+  cpu_.iowait(std::stol(cpuUtilizationString[4]));
+  cpu_.irq(std::stol(cpuUtilizationString[5]));
+  cpu_.softirq(std::stol(cpuUtilizationString[6]));
+  cpu_.steal(std::stol(cpuUtilizationString[7]));
+  cpu_.guest(std::stol(cpuUtilizationString[8]));
+  cpu_.guest_nice(std::stol(cpuUtilizationString[9]));
+
   return cpu_;
 }
 
 // TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() { return processes_; }
+vector<Process>& System::Processes()
+{
+  return processes_;
+}
 
 // DONE: Return the system's memory utilization
 float System::MemoryUtilization()
