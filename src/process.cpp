@@ -22,10 +22,15 @@ void Process::Pid(int pid)
   pid_ = pid;
 }
 
-// TODO: Return the user (name) that generated this process
+// DONE: Return the user (name) that generated this process
 string Process::User()
 {
-  return string();
+  return user_;
+}
+
+void Process::User(std::string user)
+{
+  user_ = user;
 }
 
 // TODO: Return this process's CPU utilization

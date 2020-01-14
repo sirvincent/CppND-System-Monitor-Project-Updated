@@ -10,7 +10,8 @@ class Process {
 public:
   int Pid();                               // DONE: See src/process.cpp
   void Pid(int pid);
-  std::string User();                      // TODO: See src/process.cpp
+  std::string User();                      // DONE: See src/process.cpp
+  void User(std::string user);
   std::string Command();                   // TODO: See src/process.cpp
   float CpuUtilization();                  // TODO: See src/process.cpp
   std::string Ram();                       // TODO: See src/process.cpp

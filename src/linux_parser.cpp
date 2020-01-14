@@ -197,9 +197,69 @@ vector<int> LinuxParser::Pids() {
   return pids;
 }
 
-// TODO: Read and return the user associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
+// DONE: Read and return the user ID associated with a process
+// DONE: REMOVE: [[maybe_unused]] once you define the function
+string LinuxParser::Uid(int pid)
+{
+  string key, value;
+  string line;
+  string uid;
+
+  std::ifstream stream(kProcDirectory + to_string(pid) + kStatusFilename);
+  if (stream.is_open())
+  {
+    while (std::getline(stream, line))
+    {
+      std::replace(line.begin(), line.end(), ':' , ' ');
+
+      std::istringstream linestream(line);
+      linestream >> key >> value;
+
+      if (key == "Uid")
+      {
+        uid = value;
+      }
+    }
+  }
+
+  return uid;
+}
+
+// DONE: Read and return the user associated with a process
+// DONE: REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::User(int uid)
+{
+  string loginName, password, userID, groupID, comment, home, optional;
+  string line;
+
+  std::ifstream stream(kPasswordPath);
+  if (stream.is_open())
+  {
+    while (std::getline(stream, line))
+    {
+      // note there are possible 7 fields, 2 are optional
+      // there are optional parameters which are sometimes empty and hence :: exists
+      std::string::size_type position = line.find("::");
+      while (position != std::string::npos)
+      {
+        // TODO: check if at the right position is inserted might need a +1
+        line.insert(position+1, "x");
+        position = line.find("::");
+      }
+      std::replace(line.begin(), line.end(), ':' , ' ');
+
+      std::istringstream linestream(line);
+      linestream >> loginName >> password >> userID >> groupID >> comment >> home >> optional;
+      // a process should only have one login name, ensured by /etc/passwd I hope
+      if (std::stoi(userID) == uid)
+      {
+        return loginName;
+      }
+    }
+  }
+  return loginName;
+}
+
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
@@ -222,9 +282,6 @@ string LinuxParser::Command(int pid [[maybe_unused]]) { return string(); }
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid [[maybe_unused]]) { return string(); }
 
-// TODO: Read and return the user ID associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Uid(int pid [[maybe_unused]]) { return string(); }
 
 
 // TODO: Read and return the uptime of a process

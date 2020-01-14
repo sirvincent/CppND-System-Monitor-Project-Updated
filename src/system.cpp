@@ -50,6 +50,10 @@ vector<Process>& System::Processes()
     Process process;
     process.Pid(pid);
 
+    string uid  = LinuxParser::Uid(process.Pid());
+    string user = LinuxParser::User(std::stoi(uid));
+    process.User(user);
+
     processes_.push_back(process);
   }
 
