@@ -54,6 +54,13 @@ vector<Process>& System::Processes()
     string user = LinuxParser::User(std::stoi(uid));
     process.User(user);
 
+    string command = LinuxParser::Command(process.Pid());
+    process.Command(command);
+
+    // TODO: std::string Ram();
+    // TODO: long int UpTime();
+    // TODO: float CpuUtilization();
+
     processes_.push_back(process);
   }
 

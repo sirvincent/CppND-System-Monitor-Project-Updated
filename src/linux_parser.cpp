@@ -260,7 +260,38 @@ string LinuxParser::User(int uid)
   return loginName;
 }
 
+// DONE: Read and return the command associated with a process
+// DONE: REMOVE: [[maybe_unused]] once you define the function
+string LinuxParser::Command(int pid)
+{
+  string command;
 
+  std::ifstream stream(kProcDirectory + std::to_string(pid) + kCmdlineFilename);
+  if (stream.is_open())
+  {
+    // TODO: assert if only a single line
+    std::getline(stream, command);
+  }
+
+  return command;
+}
+
+// TODO: Read and return the memory used by a process
+// REMOVE: [[maybe_unused]] once you define the function
+string LinuxParser::Ram(int pid [[maybe_unused]]) { return string(); }
+
+// TODO: Read and return the uptime of a process
+// REMOVE: [[maybe_unused]] once you define the function
+long LinuxParser::UpTime(int pid [[maybe_unused]]) { return 0; }
+
+
+
+/*
+TODO: CpuUtilization
+
+// Jiffies are no valid names anymore for kernel > 2.6,
+// I will assume (so will need to assert) that kernel > 2.6.
+// TODO: assert kernel > 2.6
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
 
@@ -273,17 +304,5 @@ long LinuxParser::ActiveJiffies() { return 0; }
 
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() { return 0; }
+*/
 
-// TODO: Read and return the command associated with a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Command(int pid [[maybe_unused]]) { return string(); }
-
-// TODO: Read and return the memory used by a process
-// REMOVE: [[maybe_unused]] once you define the function
-string LinuxParser::Ram(int pid [[maybe_unused]]) { return string(); }
-
-
-
-// TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid [[maybe_unused]]) { return 0; }
