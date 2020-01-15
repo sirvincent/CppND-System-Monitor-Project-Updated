@@ -14,8 +14,9 @@ public:
   void User(std::string user);
   std::string Command();                   // DONE: See src/process.cpp
   void Command(std::string command);
+  std::string Ram();                       // DONE: See src/process.cpp
+  void Ram(std::string ram);
   float CpuUtilization();                  // TODO: See src/process.cpp
-  std::string Ram();                       // TODO: See src/process.cpp
   long int UpTime();                       // TODO: See src/process.cpp
   bool operator<(Process const& a) const;  // TODO: See src/process.cpp
 
@@ -24,6 +25,7 @@ private:
   int pid_;
   std::string user_;
   std::string command_;
+  std::string ram_;
 };
 
 #endif

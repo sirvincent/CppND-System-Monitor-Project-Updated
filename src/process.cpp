@@ -44,8 +44,16 @@ void Process::Command(std::string command)
   command_ = command;
 }
 
-// TODO: Return this process's memory utilization
-string Process::Ram() { return string(); }
+// DONE: Return this process's memory utilization
+string Process::Ram()
+{
+  return ram_;
+}
+
+void Process::Ram(std::string ram)
+{
+  ram_ = ram;
+}
 
 // TODO: Return the age of this process (in seconds)
 long int Process::UpTime() { return 0; }

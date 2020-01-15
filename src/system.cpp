@@ -57,7 +57,12 @@ vector<Process>& System::Processes()
     string command = LinuxParser::Command(process.Pid());
     process.Command(command);
 
-    // TODO: std::string Ram();
+    string ram = LinuxParser::Ram(process.Pid());
+    // ram is always in kB (due to the assert) but we want show in MB
+    // I think this is a job of system to convert? since it manages Process and communicates to the display
+    long ramInteger = std::stoi(ram) / 1000;
+    process.Ram(std::to_string(ramInteger));
+
     // TODO: long int UpTime();
     // TODO: float CpuUtilization();
 
