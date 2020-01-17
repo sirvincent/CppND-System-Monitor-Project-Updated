@@ -24,7 +24,7 @@ string Format::ElapsedTime(long seconds)
   //display can only show up to 99 hours
   if (seconds > 360000)
   {
-    seconds = seconds - 360000;
+    seconds = seconds % 360000;
   }
 
   long hours = seconds / 3600;
