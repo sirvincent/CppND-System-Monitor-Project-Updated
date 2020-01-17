@@ -303,29 +303,55 @@ string LinuxParser::Ram(int pid)
   return ram;
 }
 
+std::vector<string> LinuxParser::StatReader(int pid)
+{
+  std::vector<string> fields;
+  string line, field;
+
+  std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatFilename);
+  if (stream.is_open())
+  {
+    // Assert that it is only a single line?
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    while (linestream >> field)
+    {
+      fields.push_back(field);
+    }
+  }
+
+  return fields;
+}
+
 // TODO: Read and return the uptime of a process
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid [[maybe_unused]]) { return 0; }
+// DONE: REMOVE: [[maybe_unused]] once you define the function
+long LinuxParser::UpTime(int pid)
+{
+  std::vector<string> fields = StatReader(pid);
 
+  // TODO: uptime does not go correctly?
+  long uptime = std::stol(fields[21]) / sysconf(_SC_CLK_TCK);
 
+  return uptime;
+}
 
-/*
-TODO: CpuUtilization
+float LinuxParser::CpuUtilization(int pid)
+{
+  long uptime = UpTime();
 
-// Jiffies are no valid names anymore for kernel > 2.6,
-// I will assume (so will need to assert) that kernel > 2.6.
-// TODO: assert kernel > 2.6
-// TODO: Read and return the number of jiffies for the system
-long LinuxParser::Jiffies() { return 0; }
+  std::vector<string> fields = StatReader(pid);
 
-// TODO: Read and return the number of active jiffies for a PID
-// REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::ActiveJiffies(int pid [[maybe_unused]]) { return 0; }
+  long utime     = std::stol(fields[13]);
+  long stime     = std::stol(fields[14]);
+  long cutime    = std::stol(fields[15]);
+  long cstime    = std::stol(fields[16]);
+  long starttime = std::stol(fields[21]);
 
-// TODO: Read and return the number of active jiffies for the system
-long LinuxParser::ActiveJiffies() { return 0; }
+  long total_time = utime + stime;
+  total_time = total_time + cutime + cstime;
+  float seconds = uptime - (starttime / sysconf((_SC_CLK_TCK)));
+  float cpu_utilization = (total_time / sysconf(_SC_CLK_TCK)) / seconds;
 
-// TODO: Read and return the number of idle jiffies for the system
-long LinuxParser::IdleJiffies() { return 0; }
-*/
+  return cpu_utilization;
+}
 

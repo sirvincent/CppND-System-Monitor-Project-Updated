@@ -36,10 +36,9 @@ Processor& System::Cpu()
   return cpu_;
 }
 
-// TODO: Return a container composed of the system's processes
+// DONE: Return a container composed of the system's processes
 vector<Process>& System::Processes()
 {
-  std::vector<Process> processes;
   vector<int> pids = LinuxParser::Pids();
 
   // clear to circumvent double entries, is it better to look only for 'dead' and new ones?
@@ -63,11 +62,19 @@ vector<Process>& System::Processes()
     long ramInteger = std::stoi(ram) / 1000;
     process.Ram(std::to_string(ramInteger));
 
-    // TODO: long int UpTime();
-    // TODO: float CpuUtilization();
+    long uptime = LinuxParser::UpTime(process.Pid());
+    process.UpTime(uptime);
+
+    float cpu_utilization = LinuxParser::CpuUtilization(process.Pid());
+    process.CpuUtilization(cpu_utilization);
 
     processes_.push_back(process);
   }
+
+  // TODO: better to immediately sort larger then requires passing a function std::sort,
+  //       but we are required to overload operator< so do it in this way
+  std::sort(processes_.begin(), processes_.end());
+  std::reverse(processes_.begin(), processes_.end());
 
   return processes_;
 }

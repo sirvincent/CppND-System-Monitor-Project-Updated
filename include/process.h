@@ -16,16 +16,20 @@ public:
   void Command(std::string command);
   std::string Ram();                       // DONE: See src/process.cpp
   void Ram(std::string ram);
-  float CpuUtilization();                  // TODO: See src/process.cpp
-  long int UpTime();                       // TODO: See src/process.cpp
-  bool operator<(Process const& a) const;  // TODO: See src/process.cpp
+  long int UpTime();                       // DONE: See src/process.cpp
+  void UpTime(long int uptime);
+  float CpuUtilization();                  // DONE: See src/process.cpp
+  void CpuUtilization(float cpu_utilization);
+  bool operator<(Process const& a) const;  // DONE: See src/process.cpp
 
-  // TODO: Declare any necessary private members
+  // DONE: Declare any necessary private members
 private:
   int pid_;
   std::string user_;
   std::string command_;
   std::string ram_;
+  long int uptime_;
+  float cpu_utilization_;
 };
 
 #endif

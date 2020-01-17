@@ -55,14 +55,31 @@ void Process::Ram(std::string ram)
   ram_ = ram;
 }
 
-// TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return 0; }
+// DONE: Return the age of this process (in seconds)
+long int Process::UpTime()
+{
+  return uptime_;
+}
 
-// TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { return 0; }
+void Process::UpTime(long int uptime)
+{
+  uptime_ = uptime;
+}
 
-// TODO: Overload the "less than" comparison operator for Process objects
-// REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a [[maybe_unused]]) const {
-  return true;
+// DONE: Return this process's CPU utilization
+float Process::CpuUtilization()
+{
+  return cpu_utilization_;
+}
+
+void Process::CpuUtilization(float cpu_utilization)
+{
+  cpu_utilization_ = cpu_utilization;
+}
+
+// DONE: Overload the "less than" comparison operator for Process objects
+// DONE: REMOVE: [[maybe_unused]] once you define the function
+bool Process::operator<(Process const &other) const
+{
+  return cpu_utilization_ < other.cpu_utilization_;
 }
