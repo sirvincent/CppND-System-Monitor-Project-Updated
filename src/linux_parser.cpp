@@ -280,7 +280,7 @@ string LinuxParser::Command(int pid)
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid)
 {
-  string ram{"0"};
+  string ram;
   string line, key, value, unit;
 
   std::ifstream stream(kProcDirectory + std::to_string(pid) + kStatusFilename);

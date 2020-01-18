@@ -49,23 +49,36 @@ vector<Process>& System::Processes()
     Process process;
     process.Pid(pid);
 
-    string uid  = LinuxParser::Uid(process.Pid());
+  // add new pids to vector
+    int const &pid = process.Pid();
+    string uid  = LinuxParser::Uid(pid);
+    // I find it interesting that I need to check again if string is not empty, I though stream.is_open() will ensure file exists
+    // but maybe not all processes have a Uid string? Or it process stops stream.is_open() check?
+    if (uid.empty())
+    {
+      continue;
+    }
     string user = LinuxParser::User(std::stoi(uid));
     process.User(user);
 
-    string command = LinuxParser::Command(process.Pid());
+    // TODO: at a certain point in time the command from one overlaps with the order, how?
+    string command = LinuxParser::Command(pid);
     process.Command(command);
 
-    string ram = LinuxParser::Ram(process.Pid());
+    string ram = LinuxParser::Ram(pid);
+    if (ram.empty())
+    {
+      continue;
+    }
     // ram is always in kB (due to the assert) but we want show in MB
     // I think this is a job of system to convert? since it manages Process and communicates to the display
     long ramInteger = std::stoi(ram) / 1000;
     process.Ram(std::to_string(ramInteger));
 
-    long uptime = LinuxParser::UpTime(process.Pid());
+    long uptime = LinuxParser::UpTime(pid);
     process.UpTime(uptime);
 
-    float cpu_utilization = LinuxParser::CpuUtilization(process.Pid());
+    float cpu_utilization = LinuxParser::CpuUtilization(pid);
     process.CpuUtilization(cpu_utilization);
 
     processes_.push_back(process);
