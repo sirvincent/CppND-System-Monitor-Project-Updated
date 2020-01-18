@@ -44,13 +44,11 @@ vector<Process>& System::Processes()
   // clear to circumvent double entries, is it better to look only for 'dead' and new ones?
   //   it will be complexer, at maybe a marginel efficiency boost?
   processes_.clear();
-  for (auto pid : pids)
+  for (int const pid : pids)
   {
     Process process;
     process.Pid(pid);
 
-  // add new pids to vector
-    int const &pid = process.Pid();
     string uid  = LinuxParser::Uid(pid);
     // I find it interesting that I need to check again if string is not empty, I though stream.is_open() will ensure file exists
     // but maybe not all processes have a Uid string? Or it process stops stream.is_open() check?
