@@ -2,7 +2,7 @@
 #define PROCESSOR_H
 
 class Processor {
-public:
+ public:
   float Utilization();  // DONE: See src/processor.cpp
 
   // create setters for future expansion with restrictions. otherwise could
@@ -20,8 +20,9 @@ public:
   // TODO: should provide getters if setters are provided
 
   // DONE: Declare any necessary private members
-private:
-  // time is in USER_HZ (typically hundreths of a second) so use long since values can be large
+ private:
+  // time is in USER_HZ (typically hundreths of a second) so use long since
+  // values can be large
   long user_;
   long nice_;
   long system_;

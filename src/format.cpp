@@ -1,40 +1,32 @@
 #include "format.h"
 
-#include <string>
 #include <algorithm>
 #include <cassert>
+#include <string>
 
 using std::string;
 
-
-void Format::formatNumber(string &number)
-{
-  if (number.size() == 1)
-  {
+void Format::formatNumber(string &number) {
+  if (number.size() == 1) {
     number = string("0") + number;
   }
 }
 
-
 // DONE: Complete this helper function
 // INPUT: Long int measuring seconds
 // OUTPUT: HH:MM:SS
-string Format::ElapsedTime(long seconds)
-{
-  //display can only show up to 99 hours
-  if (seconds > 360000)
-  {
+string Format::ElapsedTime(long seconds) {
+  // display can only show up to 99 hours
+  if (seconds > 360000) {
     seconds = seconds % 360000;
   }
 
   long hours = seconds / 3600;
-  if (hours > 0)
-  {
+  if (hours > 0) {
     seconds = seconds % 3600;
   }
   long minutes = seconds / 60;
-  if (minutes > 0)
-  {
+  if (minutes > 0) {
     seconds = seconds % 60;
   }
 
@@ -46,7 +38,7 @@ string Format::ElapsedTime(long seconds)
   string secondsString = std::to_string(seconds);
   formatNumber(secondsString);
   // similar things should be in tests
-  assert(hourString.size()    == 2);
+  assert(hourString.size() == 2);
   assert(minutesString.size() == 2);
   assert(secondsString.size() == 2);
 

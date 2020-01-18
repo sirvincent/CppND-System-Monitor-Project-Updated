@@ -7,9 +7,9 @@
 #include <string>
 #include <vector>
 
+#include "linux_parser.h"
 #include "process.h"
 #include "processor.h"
-#include "linux_parser.h"
 
 using std::set;
 using std::size_t;
@@ -17,11 +17,11 @@ using std::string;
 using std::vector;
 
 // DONE: Return the system's CPU
-Processor& System::Cpu()
-{
+Processor& System::Cpu() {
   std::vector<string> cpuUtilizationString = LinuxParser::CpuUtilization();
 
-  // whos job is it to convert to long, this function or Process? I think this function
+  // whos job is it to convert to long, this function or Process? I think this
+  // function
   cpu_.user(std::stol(cpuUtilizationString[0]));
   cpu_.nice(std::stol(cpuUtilizationString[1]));
   cpu_.system(std::stol(cpuUtilizationString[2]));
@@ -37,42 +37,43 @@ Processor& System::Cpu()
 }
 
 // DONE: Return a container composed of the system's processes
-vector<Process>& System::Processes()
-{
-  // we could use a set to circumvent duplicates but I am assuming now Pids() entries are unique, assert it!
+vector<Process>& System::Processes() {
+  // we could use a set to circumvent duplicates but I am assuming now Pids()
+  // entries are unique, assert it!
   vector<int> pids = LinuxParser::Pids();
 
-  // clear to circumvent double entries, is it better to look only for 'dead' and new ones?
+  // clear to circumvent double entries, is it better to look only for 'dead'
+  // and new ones?
   //   it will be complexer, at maybe a marginel efficiency boost?
-  //   we could use a vector.erase with std::remove_if to remove dead pids, whcih are not returned
-  //   by Pids().
+  //   we could use a vector.erase with std::remove_if to remove dead pids,
+  //   whcih are not returned by Pids().
   processes_.clear();
-  for (int const pid : pids)
-  {
+  for (int const pid : pids) {
     Process process;
     process.Pid(pid);
 
-    string uid  = LinuxParser::Uid(pid);
-    // I find it interesting that I need to check again if string is not empty, I though stream.is_open() will ensure file exists
-    // but maybe not all processes have a Uid string?
-    if (uid.empty())
-    {
+    string uid = LinuxParser::Uid(pid);
+    // I find it interesting that I need to check again if string is not empty,
+    // I though stream.is_open() will ensure file exists but maybe not all
+    // processes have a Uid string?
+    if (uid.empty()) {
       continue;
     }
     string user = LinuxParser::User(std::stoi(uid));
     process.User(user);
 
-    // TODO: at a certain point in time the command from one overlaps with the order, how?
+    // TODO: at a certain point in time the command from one overlaps with the
+    // order, how?
     string command = LinuxParser::Command(pid);
     process.Command(command);
 
     string ram = LinuxParser::Ram(pid);
-    if (ram.empty())
-    {
+    if (ram.empty()) {
       continue;
     }
     // ram is always in kB (due to the assert) but we want show in MB
-    // I think this is a job of system to convert? since it manages Process and communicates to the display
+    // I think this is a job of system to convert? since it manages Process and
+    // communicates to the display
     long ramInteger = std::stoi(ram) / 1000;
     process.Ram(std::to_string(ramInteger));
 
@@ -85,7 +86,8 @@ vector<Process>& System::Processes()
     processes_.push_back(process);
   }
 
-  // TODO: better to immediately sort larger then requires passing a function std::sort,
+  // TODO: better to immediately sort larger then requires passing a function
+  // std::sort,
   //       but we are required to overload operator< so do it in this way
   std::sort(processes_.begin(), processes_.end());
   std::reverse(processes_.begin(), processes_.end());
@@ -94,39 +96,19 @@ vector<Process>& System::Processes()
 }
 
 // DONE: Return the system's memory utilization
-float System::MemoryUtilization()
-{
-  return LinuxParser::MemoryUtilization();
-}
+float System::MemoryUtilization() { return LinuxParser::MemoryUtilization(); }
 
 // DONE: Return the number of seconds since the system started running
-long int System::UpTime()
-{
-  return LinuxParser::UpTime();
-}
+long int System::UpTime() { return LinuxParser::UpTime(); }
 
 // DONE: Return the total number of processes on the system
-int System::TotalProcesses()
-{
-  return LinuxParser::TotalProcesses();
-}
+int System::TotalProcesses() { return LinuxParser::TotalProcesses(); }
 
 // DONE: Return the number of processes actively running on the system
-int System::RunningProcesses()
-{
-  return LinuxParser::RunningProcesses();
-}
-
+int System::RunningProcesses() { return LinuxParser::RunningProcesses(); }
 
 // DONE: Return the system's kernel identifier (string)
-std::string System::Kernel()
-{
-  return LinuxParser::Kernel();
-}
+std::string System::Kernel() { return LinuxParser::Kernel(); }
 
 // DONE: Return the operating system name
-std::string System::OperatingSystem()
-{
-  return LinuxParser::OperatingSystem();
-}
-
+std::string System::OperatingSystem() { return LinuxParser::OperatingSystem(); }
