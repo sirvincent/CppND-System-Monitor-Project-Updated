@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <unistd.h>
 
+#include <filesystem>
 #include <string>
 #include <vector>
 #include <cassert>
@@ -177,23 +178,24 @@ vector<string> LinuxParser::CpuUtilization()
 }
 
 
-// TODO: BONUS: Update this to use std::filesystem
+// DONE: BONUS: Update this to use std::filesystem
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
-  DIR* directory = opendir(kProcDirectory.c_str());
-  struct dirent* file;
-  while ((file = readdir(directory)) != nullptr) {
-    // Is this a directory?
-    if (file->d_type == DT_DIR) {
-      // Is every character of the name a digit?
-      string filename(file->d_name);
-      if (std::all_of(filename.begin(), filename.end(), isdigit)) {
-        int pid = stoi(filename);
+  std::filesystem::path directory(kProcDirectory);
+  assert(directory.is_absolute());
+
+  for (std::filesystem::directory_entry const &dir : std::filesystem::directory_iterator(directory))
+  {
+    if (dir.is_directory())
+    {
+      std::string path_string = dir.path().filename().string();
+      if (std::all_of(path_string.begin(), path_string.end(), isdigit))
+      {
+        int pid = std::stoi(path_string);
         pids.push_back(pid);
       }
     }
   }
-  closedir(directory);
   return pids;
 }
 
