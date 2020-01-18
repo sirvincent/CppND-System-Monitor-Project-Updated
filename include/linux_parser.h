@@ -29,7 +29,7 @@ std::string Kernel();
 std::vector<std::string> CpuUtilization();
 
 // CPU
-// TODO: unused ut No need in the current Processor implementation
+// TODO: unused enum No need in the current Processor implementation
 enum CPUStates {
   kUser_ = 0,
   kNice_,

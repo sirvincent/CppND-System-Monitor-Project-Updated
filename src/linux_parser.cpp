@@ -323,13 +323,12 @@ std::vector<string> LinuxParser::StatReader(int pid)
   return fields;
 }
 
-// TODO: Read and return the uptime of a process
+// DONE: Read and return the uptime of a process
 // DONE: REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid)
 {
   std::vector<string> fields = StatReader(pid);
 
-  // TODO: uptime does not go correctly?
   long uptime = std::stol(fields[21]) / sysconf(_SC_CLK_TCK);
 
   return uptime;
